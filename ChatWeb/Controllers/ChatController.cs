@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ChatWeb.Controllers
 {
+
     public class ChatController : Controller
     {
-        private static List<KeyValuePair<string, string>> messages = new();
+        //private static List<KeyValuePair<string, string>> messages = new();
+        private static List<MessageViewModel> messages = new();
 
         public IActionResult Show()
         {
@@ -16,12 +18,14 @@ namespace ChatWeb.Controllers
 
             var chatModel = new ChatViewModel()
             {
+                //Messages = messages
+                //.Select(m => new MessageViewModel()
+                //{
+                //    Sender = m.Sender,
+                //    MessageText = m.Value
+                //}).ToList()
                 Messages = messages
-                .Select(m => new MessageViewModel()
-                {
-                    Sender = m.Key,
-                    MessageText = m.Value
-                }).ToList()
+                .Select(m => m).ToList()
             };
 
             return View(chatModel);
@@ -37,7 +41,8 @@ namespace ChatWeb.Controllers
                 newMessage.Sender != null
                 && newMessage.MessageText != null)
             {
-                messages.Add(new KeyValuePair<string, string>(newMessage.Sender, newMessage.MessageText));
+                //messages.Add(new KeyValuePair<string, string>(newMessage.Sender, newMessage.MessageText));
+                messages.Add(newMessage);
             }
 
             return RedirectToAction("Show");
